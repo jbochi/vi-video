@@ -8,10 +8,15 @@ Editing a video or audio file with this tool consists of three steps:
 
 - Create a srt file and a text file with the transcription
 - Edit the text trascription file
-- Run this tool to find what segments of the original video should be preserved
-- Run ffmpeg to create the cut out video/audio file
+- Run this tool
 
-You can run command to find the segments of the video that should be preserved like this:
+Execution looks like this:
+
+```console
+python src/vivideo/edit.py -media samples/jfk.wav -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt -o samples/jfk.edited.wav
+```
+
+If you want to debug which segments of the video are going to be preserved, you can run something like this:
 
 ```console
 python src/vivideo/align.py -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt

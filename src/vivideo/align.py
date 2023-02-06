@@ -14,7 +14,7 @@ parser.add_argument(
     "-txt", "--input_txt_file", help="Edited transcription TXT file", required=True
 )
 parser.add_argument(
-    "-m", "--margin", help="Buffer between utterences", default=50, type=int
+    "-m", "--margin", help="Buffer between utterences", default=0, type=int
 )
 
 Cut = namedtuple("Cut", ["start", "end"])
