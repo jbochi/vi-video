@@ -6,10 +6,10 @@ Edit videos with vi or your favorite text editor.
 
 Editing a video or audio file with this tool consists of three steps:
 
-- Creating a srt file and a text file with the transcription
-- Editing the trascription file
-- Running this tool to find what segments of the original video should be preserved
-- Running ffmpeg to create the cut out video/audio file
+- Create a srt file and a text file with the transcription
+- Edit the text trascription file
+- Run this tool to find what segments of the original video should be preserved
+- Run ffmpeg to create the cut out video/audio file
 
 ## Alternatives
 
@@ -18,13 +18,19 @@ a video like it's a text document.
 
 The best open source tool we could find is [auto-editor](https://github.com/WyattBlue/auto-editor).
 
-## Creating srt files
+## Creating srt files and text script files
 
 We suggest [whisper.cpp](https://github.com/ggerganov/whisper.cpp) to generate srt files with the
 transcription of the file you want to edit. Use `--max-len 1` for word-level timestamps.
 
 ```console
 ./main -m models/ggml-base.en.bin -f samples/jfk.wav  --output-srt --output-txt  --max-len 1
+```
+
+To generate the trascription text file, you can run this command:
+
+```console
+python src/vivideo/compact.py -i samples/jfk.wav.srt -o samples/jfk.wav.txt
 ```
 
 ## Algorithm
