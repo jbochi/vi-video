@@ -8,8 +8,8 @@ import srt
 
 parser = argparse.ArgumentParser(description="Generate compact text")
 
-parser.add_argument("-i", "--input_srt_file", help="Input SRT file")
-parser.add_argument("-o", "--output_txt_file", help="Output TXT file")
+parser.add_argument("-i", "--input_srt_file", help="Input SRT file", required=True)
+parser.add_argument("-o", "--output_txt_file", help="Output TXT file", required=True)
 parser.add_argument(
     "-m",
     "--margin",
