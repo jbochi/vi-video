@@ -40,7 +40,7 @@ def main():
         "-i",
         args.input_media_file,
         "-vf",
-        f"select={between},setpts=N/FRAME_RATE/TB",
+        f"select='{between}',setpts=N/FRAME_RATE/TB",
         "-af",
         f"aselect='{between}',asetpts=N/SR/TB",
         args.output_file,

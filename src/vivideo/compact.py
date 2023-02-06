@@ -14,7 +14,7 @@ parser.add_argument(
     "-m",
     "--margin",
     help="Maximum time between utterences in same paragraph (in milliseconds)",
-    default=1000,
+    default=100,
     type=int,
 )
 
