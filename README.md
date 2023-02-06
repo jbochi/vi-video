@@ -31,6 +31,8 @@ transcription of the file you want to edit. Use `--max-len 1` for word-level tim
 
 MVP aligns each word in the deserided transcript to its first occurrance in the original transcription. It only looks for matches that occur after the last matched word/timestamp, so transpositions are not allowed.
 
+To make the result seem nicer, it will include a margin before and after each cut, as in [auto-editor](https://valle-demo.github.io/). If the margin of one cut would overlap with the margin of the following cut, then we don't make a cut.
+
 We will probably want to use something like [Damerau–Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) to find the best possible alignment between original string (transcription) and desired output string (edited script).
 
 If the desired transcript contains words not in the original (inclusions), we could do overdub or speech synthesis with something like [VALL-E](https://valle-demo.github.io/).
