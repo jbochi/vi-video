@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from typing import Generator, List, Tuple
+from typing import List
 
 from collections import namedtuple
 import argparse
