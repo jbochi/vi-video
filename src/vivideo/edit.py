@@ -1,8 +1,8 @@
 import datetime
 from pathlib import Path
 
-import subprocess
 import argparse
+import subprocess
 import srt
 
 from align import list_cuts
@@ -37,6 +37,7 @@ parser.add_argument(
     dest='greedy',
     default=True,
     action='store_true'
+    # action=argparse.BooleanOptionalAction,
 )
 
 
