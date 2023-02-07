@@ -20,41 +20,43 @@ parser.add_argument(
 Cut = namedtuple("Cut", ["start", "end"])
 
 
-def pick_segments(
-    subtitles: List[srt.Subtitle],
+def pick_words(
+    words: List[str],
     desired_transcription: str,
-) -> List[Cut]:
-    """Given a list of subtitles and a desired transcription, return a list of cuts
-    (start, end) that correspond to segments of the media with the desired transcription.
+) -> List[int]:
+    """Given a list of words from the original transcription and a desired transcription, return a list of
+    words' indices that should be selected to achieve the desired transcription.
     """
     # TODO: Should minimize number of cuts and allow transposition of words.
-    subtitle_index = 0
-    n_subtitles = len(subtitles)
+    word_index = 0
+    n_words = len(words)
     output = []
     for word in re.findall(r"['\w]+", desired_transcription):
-        while (
-            subtitle_index < n_subtitles
-            and subtitles[subtitle_index].content.lower() != word.lower()
-        ):
-            subtitle_index += 1
-        if subtitle_index == n_subtitles:
+        while word_index < n_words and words[word_index].lower() != word.lower():
+            word_index += 1
+        if word_index == n_words:
             raise ValueError(
                 f"Could not find all words in subtitles. First missing word: {word}"
             )
-        output.append(
-            Cut(subtitles[subtitle_index].start, subtitles[subtitle_index].end)
-        )
-        subtitle_index += 1
+        output.append(word_index)
+        word_index += 1
     return output
 
 
-def merge_segments(cut: List[Cut], margin: datetime.timedelta) -> List[Cut]:
-    """Given a list of cuts, merge cuts that are within margin of each other."""
-    # TODO: should decrease margin to avoid including undesired words.
+def merge_segments(
+    subtitles: List[srt.Subtitle], chosen: List[int], margin: datetime.timedelta
+) -> List[Cut]:
+    """Given a list of subtitles, the list of indices to select, merge cuts that are within margin of each other."""
     output = []
-    for start, end in cut:
+    for index in chosen:
+        subtitle = subtitles[index]
+        start = subtitle.start
+        end = subtitle.end
+
+        # TODO: Should check if margin wouldn't cause overlap with undesired words.
         start -= margin
         end += margin
+
         if start < datetime.timedelta():
             start = datetime.timedelta()
         if output and output[-1].end >= start:
@@ -72,8 +74,9 @@ def list_cuts(
     """Given a list of subtitles and a desired transcription, return a list of cuts
     (start, end) that correspond to segments of the media with the desired transcription. Also
     includes a configurable margin of time before and after each cut."""
-    segments = pick_segments(subtitles, desired_transcription)
-    return merge_segments(segments, margin)
+    words = [subtitle.content for subtitle in subtitles]
+    chosen_words = pick_words(words, desired_transcription)
+    return merge_segments(subtitles, chosen_words, margin)
 
 
 def main():
