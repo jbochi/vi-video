@@ -53,8 +53,10 @@ def compute_cuts(
         subtitle = subtitles[index]
         start = subtitle.start
         end = subtitle.end
+        # print(subtitle.content, start, end)
 
         # TODO: Should check if margin wouldn't cause overlap with undesired words.
+        # TODO: If past word subtitles[index-1] is r"^\'" increase margin by factor? e.g. It's doable
         start -= margin
         end += margin
 
