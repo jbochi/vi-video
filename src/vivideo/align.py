@@ -76,7 +76,7 @@ def pick_words(
     best = []
     best_cost = float("inf")
 
-    def backtrack(desired_word_index: int, cost: int, max_branch_factor: int = 1):
+    def backtrack(desired_word_index: int, cost: int, max_branch_factor: int = 3):
         nonlocal best, best_cost, used, path
         if cost > best_cost:
             return
