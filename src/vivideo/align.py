@@ -22,6 +22,7 @@ parser.add_argument(
     help="Greedily selects next word, so runs faster",
     default=True,
     type=bool,
+    action=argparse.BooleanOptionalAction,
 )
 
 Cut = namedtuple("Cut", ["start", "end"])
@@ -75,7 +76,7 @@ def pick_words(
     best = []
     best_cost = float("inf")
 
-    def backtrack(desired_word_index: int, cost: int):
+    def backtrack(desired_word_index: int, cost: int, branch_factor: int = 3):
         nonlocal best, best_cost, used, path
         if cost > best_cost:
             return
@@ -85,8 +86,14 @@ def pick_words(
             return
         word = desired_words[desired_word_index]
         options = [p for p in word_positions[word] if not used[p]]
+        current_pos = path[-1] if path else 0
+        if len(options) >= branch_factor:
+            # Only look at the closest options to avoid combinatorial explosion.
+            options = sorted(options, key=lambda p: abs(p - current_pos))[
+                :branch_factor
+            ]
         for option in options:
-            option_cost = cost + abs(option - (path[-1] if path else 0))
+            option_cost = cost + abs(option - current_pos)
             used[option] = True
             path.append(option)
             backtrack(desired_word_index + 1, option_cost)
@@ -114,7 +121,7 @@ def compute_cuts(
         start -= margin
         end += margin
         if index > 0:
-            if subtitles[index-1].content.startswith("'"):
+            if subtitles[index - 1].content.startswith("'"):
                 start -= margin * 1.1
 
         if start < datetime.timedelta():

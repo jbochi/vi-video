@@ -26,6 +26,7 @@ parser.add_argument(
     help="Greedily selects next word, so runs faster",
     default=True,
     type=bool,
+    action=argparse.BooleanOptionalAction,
 )
 
 
