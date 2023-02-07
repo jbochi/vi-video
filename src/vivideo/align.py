@@ -64,7 +64,7 @@ def pick_words(
         word_positions[word.lower()].append(i)
 
     desired_words = [w.lower() for w in re.findall(r"['\w]+", desired_transcription)]
-    desired_word_counts = Counter()
+    desired_word_counts = Counter(desired_words)
     for word, count in desired_word_counts.items():
         if count > len(word_positions[word]):
             raise ValueError(
@@ -76,7 +76,7 @@ def pick_words(
     best = []
     best_cost = float("inf")
 
-    def backtrack(desired_word_index: int, cost: int, branch_factor: int = 3):
+    def backtrack(desired_word_index: int, cost: int, max_branch_factor: int = 1):
         nonlocal best, best_cost, used, path
         if cost > best_cost:
             return
@@ -87,10 +87,10 @@ def pick_words(
         word = desired_words[desired_word_index]
         options = [p for p in word_positions[word] if not used[p]]
         current_pos = path[-1] if path else 0
-        if len(options) >= branch_factor:
+        if len(options) >= max_branch_factor:
             # Only look at the closest options to avoid combinatorial explosion.
             options = sorted(options, key=lambda p: abs(p - current_pos))[
-                :branch_factor
+                :max_branch_factor
             ]
         for option in options:
             option_cost = cost + abs(option - current_pos)
@@ -101,6 +101,8 @@ def pick_words(
             path.pop()
 
     backtrack(0, 0)
+    if not best:
+        raise RuntimeError("Failed to find words for desired transcription.")
     return best
 
 
