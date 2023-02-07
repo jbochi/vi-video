@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+import pytest
 import srt
 
 from vivideo.align import Cut, list_cuts
@@ -58,10 +59,39 @@ subtitle
     expected = [
         Cut(
             start=timedelta(seconds=0),
-            end=timedelta(seconds=1),
+            end=timedelta(seconds=2),
         ),
+    ]
+    assert cuts == expected
+
+
+
+@pytest.mark.skip("TODO: fix this, it should work")
+def test_list_cuts_allows_pieces_to_be_merged_without_space():
+    subtitles = srt.parse(
+        """1
+00:00:00,000 --> 00:00:01,000
+I
+
+2
+00:00:01,000 --> 00:00:02,000
+'m
+
+3
+00:00:02,000 --> 00:00:03,000
+dumb."""
+    )
+
+    desired_transcription = "I'm"
+
+    cuts = list_cuts(
+        list(subtitles),
+        desired_transcription,
+        margin=timedelta(milliseconds=00),
+    )
+    expected = [
         Cut(
-            start=timedelta(seconds=1),
+            start=timedelta(seconds=0),
             end=timedelta(seconds=2),
         ),
     ]

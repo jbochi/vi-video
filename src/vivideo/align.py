@@ -57,7 +57,7 @@ def merge_segments(cut: List[Cut], margin: datetime.timedelta) -> List[Cut]:
         end += margin
         if start < datetime.timedelta():
             start = datetime.timedelta()
-        if output and output[-1].end > start:
+        if output and output[-1].end >= start:
             output[-1] = Cut(output[-1].start, end)
         else:
             output.append(Cut(start, end))
