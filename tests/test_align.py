@@ -65,7 +65,6 @@ subtitle
     assert cuts == expected
 
 
-
 @pytest.mark.skip("TODO: fix this, it should work")
 def test_list_cuts_allows_pieces_to_be_merged_without_space():
     subtitles = srt.parse(
@@ -94,5 +93,81 @@ dumb."""
             start=timedelta(seconds=0),
             end=timedelta(seconds=2),
         ),
+    ]
+    assert cuts == expected
+
+
+@pytest.mark.skip("TODO: fix this, it should work")
+def test_allows_transposition():
+    subtitles = srt.parse(
+        """1
+00:00:00,000 --> 00:00:01,000
+first
+
+2
+00:00:01,000 --> 00:00:02,000
+second
+
+3
+00:00:02,000 --> 00:00:03,000
+third"""
+    )
+
+    desired_transcription = "first third second"
+
+    cuts = list_cuts(
+        list(subtitles),
+        desired_transcription,
+        margin=timedelta(milliseconds=00),
+    )
+    expected = [
+        Cut(
+            start=timedelta(seconds=0),
+            end=timedelta(seconds=1),
+        ),
+        Cut(
+            start=timedelta(seconds=2),
+            end=timedelta(seconds=3),
+        ),
+        Cut(
+            start=timedelta(seconds=2),
+            end=timedelta(seconds=3),
+        ),
+    ]
+    assert cuts == expected
+
+
+@pytest.mark.skip("TODO: fix this, it should work")
+def test_minimize_cuts():
+    subtitles = srt.parse(
+        """1
+00:00:00,000 --> 00:00:01,000
+I
+
+2
+00:00:01,000 --> 00:00:02,000
+I
+
+2
+00:00:02,000 --> 00:00:03,000
+like
+
+3
+00:00:03,000 --> 00:00:04,000
+this"""
+    )
+
+    desired_transcription = "I like this"
+
+    cuts = list_cuts(
+        list(subtitles),
+        desired_transcription,
+        margin=timedelta(milliseconds=00),
+    )
+    expected = [
+        Cut(
+            start=timedelta(seconds=1),
+            end=timedelta(seconds=4),
+        )
     ]
     assert cuts == expected
