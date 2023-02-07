@@ -113,6 +113,9 @@ def compute_cuts(
         # TODO: If past word subtitles[index-1] is r"^\'" increase margin by factor? e.g. It's doable
         start -= margin
         end += margin
+        if index > 0:
+            if subtitles[index-1].content.startswith("'"):
+                start -= margin * 1.1
 
         if start < datetime.timedelta():
             start = datetime.timedelta()
