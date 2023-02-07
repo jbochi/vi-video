@@ -43,10 +43,11 @@ def pick_words(
     return output
 
 
-def merge_segments(
+def compute_cuts(
     subtitles: List[srt.Subtitle], chosen: List[int], margin: datetime.timedelta
 ) -> List[Cut]:
-    """Given a list of subtitles, the list of indices to select, merge cuts that are within margin of each other."""
+    """Given a list of subtitles, the list of indices to select, list the timestamp ranges
+    that should be cut, while merging segments that are within margin of each other."""
     output = []
     for index in chosen:
         subtitle = subtitles[index]
@@ -76,7 +77,7 @@ def list_cuts(
     includes a configurable margin of time before and after each cut."""
     words = [subtitle.content for subtitle in subtitles]
     chosen_words = pick_words(words, desired_transcription)
-    return merge_segments(subtitles, chosen_words, margin)
+    return compute_cuts(subtitles, chosen_words, margin)
 
 
 def main():
