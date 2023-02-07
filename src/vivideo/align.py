@@ -24,7 +24,7 @@ def pick_segments(
     subtitles: List[srt.Subtitle],
     desired_transcription: str,
 ) -> List[Cut]:
-    """Gitven a list of subtitles and a desired transcription, return a list of cuts
+    """Given a list of subtitles and a desired transcription, return a list of cuts
     (start, end) that correspond to segments of the media with the desired transcription.
     """
     # TODO: Should minimize number of cuts and allow transposition of words.

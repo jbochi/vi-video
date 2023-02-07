@@ -22,6 +22,13 @@ If you want to debug which segments of the video are going to be preserved, you 
 python src/vivideo/align.py -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt
 ```
 
+ Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed. On unix systems, FFMpeg can be installed as below:
+ ```console
+> brew update
+> brew upgrade
+> brew install ffmpeg
+ ```
+
 ## Creating srt files and text script files
 
 We suggest [whisper.cpp](https://github.com/ggerganov/whisper.cpp) to generate srt files with the
