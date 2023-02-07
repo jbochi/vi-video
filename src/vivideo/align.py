@@ -69,7 +69,7 @@ def list_cuts(
     desired_transcription: str,
     margin: datetime.timedelta,
 ) -> List[Cut]:
-    """Gitven a list of subtitles and a desired transcription, return a list of cuts
+    """Given a list of subtitles and a desired transcription, return a list of cuts
     (start, end) that correspond to segments of the media with the desired transcription. Also
     includes a configurable margin of time before and after each cut."""
     segments = pick_segments(subtitles, desired_transcription)
