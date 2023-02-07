@@ -20,6 +20,13 @@ parser.add_argument(
     "-o", "--output_file", help="Output media", default="output.mp4", type=str
 )
 parser.add_argument("-d", "--dry_run", help="Dry run", default=False, type=bool)
+parser.add_argument(
+    "-g",
+    "--greedy",
+    help="Greedily selects next word, so runs faster",
+    default=True,
+    type=bool,
+)
 
 
 def main():
@@ -31,7 +38,10 @@ def main():
 
     margin = datetime.timedelta(milliseconds=args.margin)
     cuts = list_cuts(
-        subtitles, desired_transcription=desired_transcription, margin=margin
+        subtitles,
+        desired_transcription=desired_transcription,
+        margin=margin,
+        greedy=args.greedy,
     )
 
     between = "+".join(
