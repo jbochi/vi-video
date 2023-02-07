@@ -19,9 +19,7 @@ parser.add_argument(
 parser.add_argument(
     "-o", "--output_file", help="Output media", default="output.mp4", type=str
 )
-parser.add_argument(
-    "-d", "--dry_run", help="Dry run", default=False, type=bool
-)
+parser.add_argument("-d", "--dry_run", help="Dry run", default=False, type=bool)
 
 
 def main():
@@ -32,9 +30,14 @@ def main():
         desired_transcription = f.read()
 
     margin = datetime.timedelta(milliseconds=args.margin)
-    cuts = list_cuts(subtitles, desired_transcription=desired_transcription, margin=margin)
+    cuts = list_cuts(
+        subtitles, desired_transcription=desired_transcription, margin=margin
+    )
 
-    between = "+".join(f"between(t,{cut.start.total_seconds()},{cut.end.total_seconds()})" for cut in cuts)
+    between = "+".join(
+        f"between(t,{cut.start.total_seconds()},{cut.end.total_seconds()})"
+        for cut in cuts
+    )
     cmd = [
         "ffmpeg",
         "-i",
