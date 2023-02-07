@@ -16,10 +16,10 @@ def test_list_cuts(subtitles):
     expected = [
         Cut(
             start=timedelta(seconds=5, microseconds=360000),
-            end=timedelta(seconds=6, microseconds=310000),
+            end=timedelta(seconds=7, microseconds=60000),
         ),
         Cut(
-            start=timedelta(seconds=8, microseconds=990000),
+            start=timedelta(seconds=9, microseconds=710000),
             end=timedelta(seconds=10, microseconds=560000),
         ),
     ]

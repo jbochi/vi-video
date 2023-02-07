@@ -1,9 +1,9 @@
 import datetime
+import heapq
 import re
-
+from collections import defaultdict, namedtuple, Counter
 from typing import List
 
-from collections import defaultdict, namedtuple, Counter
 import argparse
 import srt
 
@@ -26,6 +26,7 @@ parser.add_argument(
 )
 
 Cut = namedtuple("Cut", ["start", "end"])
+SearchNode = namedtuple("SearchNode", ["cost", "neg_length", "path"])
 
 
 def pick_words_greedy(
@@ -71,39 +72,30 @@ def pick_words(
                 f"Could not find all words in subtitles. First missing word: {word}"
             )
 
-    used = [False] * len(words)
-    path = []
-    best = []
-    best_cost = float("inf")
+    heap = []
+    heapq.heappush(heap, SearchNode(cost=0, neg_length=0, path=[]))
+    while heap:
+        alternative = heapq.heappop(heap)
+        if len(alternative.path) == len(desired_words):
+            return alternative.path
+        word = desired_words[len(alternative.path)]
+        used = set(alternative.path)
 
-    def backtrack(desired_word_index: int, cost: int, max_branch_factor: int = 3):
-        nonlocal best, best_cost, used, path
-        if cost > best_cost:
-            return
-        if desired_word_index == len(desired_words):
-            best = path[:]
-            best_cost = cost
-            return
-        word = desired_words[desired_word_index]
-        options = [p for p in word_positions[word] if not used[p]]
-        current_pos = path[-1] if path else 0
-        if len(options) >= max_branch_factor:
-            # Only look at the closest options to avoid combinatorial explosion.
-            options = sorted(options, key=lambda p: abs(p - current_pos))[
-                :max_branch_factor
-            ]
-        for option in options:
-            option_cost = cost + abs(option - current_pos)
-            used[option] = True
-            path.append(option)
-            backtrack(desired_word_index + 1, option_cost)
-            used[option] = False
-            path.pop()
+        for position in word_positions[word]:
+            if position in used:
+                continue
+            new_path = alternative.path + [position]
+            current_position = alternative.path[-1] if alternative.path else position - 1
+            distance = abs(position - current_position)
+            new_cost = alternative.cost + distance - 1
+            heapq.heappush(
+                heap,
+                SearchNode(cost=new_cost, neg_length=-len(new_path), path=new_path),
+            )
 
-    backtrack(0, 0)
-    if not best:
-        raise RuntimeError("Failed to find words for desired transcription.")
-    return best
+    raise ValueError(
+        "Could not find a set of words that would match the desired transcription."
+    )
 
 
 def compute_cuts(
