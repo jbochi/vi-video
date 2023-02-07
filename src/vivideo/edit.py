@@ -1,7 +1,7 @@
 import datetime
 
-import subprocess
 import argparse
+import subprocess
 import srt
 
 from align import list_cuts

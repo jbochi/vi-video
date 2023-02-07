@@ -1,9 +1,8 @@
 import datetime
 import re
-
+from collections import defaultdict, namedtuple, Counter
 from typing import List
 
-from collections import defaultdict, namedtuple, Counter
 import argparse
 import srt
 
@@ -31,7 +30,6 @@ Cut = namedtuple("Cut", ["start", "end"])
 def pick_words_greedy(
     words: List[str],
     desired_transcription: str,
-    greedy: bool = True,
 ) -> List[int]:
     word_index = 0
     n_words = len(words)
@@ -48,17 +46,13 @@ def pick_words_greedy(
     return output
 
 
-def pick_words(
+def pick_words_brute_force(
     words: List[str],
     desired_transcription: str,
-    greedy: bool = True,
 ) -> List[int]:
     """Given a list of words from the original transcription and a desired transcription, return a list of
     words' indices that should be selected to achieve the desired transcription.
     """
-    if greedy:
-        return pick_words_greedy(words, desired_transcription, greedy=greedy)
-
     word_positions = defaultdict(list)
     for i, word in enumerate(words):
         word_positions[word.lower()].append(i)
@@ -145,7 +139,10 @@ def list_cuts(
     (start, end) that correspond to segments of the media with the desired transcription. Also
     includes a configurable margin of time before and after each cut."""
     words = [subtitle.content for subtitle in subtitles]
-    chosen_words = pick_words(words, desired_transcription, greedy=greedy)
+    if greedy:
+        chosen_words = pick_words_greedy(words, desired_transcription)
+    else:
+        chosen_words = pick_words_brute_force(words, desired_transcription)
     return compute_cuts(subtitles, chosen_words, margin)
 
 
