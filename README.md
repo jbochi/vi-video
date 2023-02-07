@@ -23,6 +23,7 @@ python src/vivideo/align.py -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited
 ```
 
  Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed. On unix systems, FFMpeg can be installed as below:
+
  ```console
 > brew update
 > brew upgrade
