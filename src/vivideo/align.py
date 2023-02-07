@@ -31,7 +31,7 @@ def pick_segments(
     subtitle_index = 0
     n_subtitles = len(subtitles)
     output = []
-    for word in re.findall(r"\w+", desired_transcription):
+    for word in re.findall(r"['\w]+", desired_transcription):
         while (
             subtitle_index < n_subtitles
             and subtitles[subtitle_index].content.lower() != word.lower()
