@@ -14,7 +14,7 @@ parser.add_argument("-media", "--input_media_file", help="Input file", required=
 parser.add_argument("-srt", "--input_srt_file", help="Input SRT file", required=True)
 parser.add_argument("-txt", "--input_txt_file", help="Edited transcription TXT file", required=True)
 parser.add_argument("-m", "--margin", default=50, help="Buffer between utterences", type=int)
-parser.add_argument("-f", "--fade_milliseconds", default=125, help="Fade In/Out Buffer between utterences", type=int)
+parser.add_argument("-f", "--fade_ms", default=125, help="Fade In/Out Buffer between utterences", type=int)
 parser.add_argument("-s", "--speed", default=1.0, help="Playback speed", type=int)
 parser.add_argument("-o", "--output_file", default="output.mp4", help="Output media", type=str)
 
@@ -46,24 +46,24 @@ def media_edit():
     """
     # Local Testing
     parser = argparse.ArgumentParser()
-    parser.set_defaults(
-        # input_media_file='tmp/demo1.mp4',
-        # input_srt_file='tmp/demo1.wav.srt',
-        # input_txt_file='tmp/demo1_edited.wav.txt',
-        # output_file='tmp/demo1.test_edit.mp4',
+    # parser.set_defaults(
+    #     # input_media_file='tmp/demo1.mp4',
+    #     # input_srt_file='tmp/demo1.wav.srt',
+    #     # input_txt_file='tmp/demo1_edited.wav.txt',
+    #     # output_file='tmp/demo1.test_edit.mp4',
 
-        input_media_file='summit/summit23_av.mp4',
-        input_srt_file='summit/summit23.wav.srt',
-        input_txt_file='summit/summit23_edited.wav.txt',
-        output_file='summit/summit23_av_edit0.mp4',
-        margin=50,
-        fade=250,
-        speed=0.5,
-        loglevel='16',
-        crossfade=True,
-        greedy=True,
-        dry_run=False
-        )
+    #     input_media_file='summit/summit23_av.mp4',
+    #     input_srt_file='summit/summit23.wav.srt',
+    #     input_txt_file='summit/summit23_edited.wav.txt',
+    #     output_file='summit/summit23_av_edit0.mp4',
+    #     margin=50,
+    #     fade=250,
+    #     speed=0.5,
+    #     loglevel='16',
+    #     crossfade=True,
+    #     greedy=True,
+    #     dry_run=False
+    #     )
 
     args = parser.parse_args()
     args.speed = min(2.0, max(0.5, args.speed))
@@ -79,13 +79,13 @@ def media_edit():
     segments = []
     cmds = []
     cuts = list_cuts(subtitles, desired_transcription=desired_transcription, margin=margin)
-    fade_seconds = datetime.timedelta(milliseconds=args.fade_milliseconds).total_seconds()
+    fade_seconds = datetime.timedelta(milliseconds=args.fade_ms).total_seconds()
     audio_video_filter = []
 
     for c, cut in enumerate(cuts):
         segment_path = output_path.with_stem(f"segment_{c}")
 
-        if args.fade_milliseconds > 0:
+        if args.fade_ms > 0:
             audio_video_filter = [
                 # video Filter
                 "-vf",
