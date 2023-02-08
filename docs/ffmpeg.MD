@@ -11,6 +11,12 @@ On unix systems, FFMpeg can be installed as below:
  ```
 
 
+A comprehensive list of flags and options can be found in references below:
+ - [FFMpeg Flags](https://gist.github.com/tayvano/6e2d456a9897f55025e25035478a3a50)
+ - [FFMpeg Filter](https://ffmpeg.org/ffmpeg-filters.html)
+ - [FFMpeg Utils](https://ffmpeg.org/ffmpeg-utils.html)
+
+
 ### Example workflows
 Converting audio to 16Khz wave files required by Whisper:
 ```console
