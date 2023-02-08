@@ -14,7 +14,7 @@ parser.add_argument("-media", "--input_media_file", help="Input file", required=
 parser.add_argument("-srt", "--input_srt_file", help="Input SRT file", required=True)
 parser.add_argument("-txt", "--input_txt_file", help="Edited transcription TXT file", required=True)
 parser.add_argument("-m", "--margin", default=50, help="Buffer between utterences", type=int)
-parser.add_argument("-f", "--fade", default=75, help="Fade In/Out Buffer between utterences", type=int)
+parser.add_argument("-f", "--fade", default=125, help="Fade In/Out Buffer between utterences", type=int)
 parser.add_argument("-s", "--speed", default=1.0, help="Playback speed", type=int)
 parser.add_argument("-o", "--output_file", default="output.mp4", help="Output media", type=str)
 
