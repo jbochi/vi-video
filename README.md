@@ -7,7 +7,7 @@ Edit videos with vi or your favorite text editor.
 Editing a video or audio file with this tool consists of three steps:
 
 - Create a srt file and a text file with the transcription
-- Edit the text trascription file
+- Edit the text transcription file
 - Run this tool
 
 Execution looks like this:
@@ -22,13 +22,7 @@ If you want to debug which segments of the video are going to be preserved, you 
 python src/vivideo/align.py -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt
 ```
 
- Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed. On unix systems, FFMpeg can be installed as below:
-
- ```console
-> brew update
-> brew upgrade
-> brew install ffmpeg
- ```
+ Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)). 
 
 ## Creating srt files and text script files
 

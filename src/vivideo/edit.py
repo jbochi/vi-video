@@ -44,18 +44,26 @@ def media_edit():
     Advanced media edit and trimming capable of
     re-ordering trimmed segments of original media
     """
-    # # Local Testing
-    # parser = argparse.ArgumentParser()
-    # parser.set_defaults(input_media_file='tmp/demo1.mp4',
-    #                     input_srt_file='tmp/demo1.wav.srt',
-    #                     input_txt_file='tmp/demo1_edited.wav.txt',
-    #                     margin=50,
-    #                     fade=250,
-    #                     speed=0.5,
-    #                     loglevel='16',
-    #                     crossfade=True,
-    #                     dry_run=False,
-    #                     output_file='tmp/demo1.test_edit.mp4')
+    # Local Testing
+    parser = argparse.ArgumentParser()
+    parser.set_defaults(
+        # input_media_file='tmp/demo1.mp4',
+        # input_srt_file='tmp/demo1.wav.srt',
+        # input_txt_file='tmp/demo1_edited.wav.txt',
+        # output_file='tmp/demo1.test_edit.mp4',
+
+        input_media_file='summit/summit23_av.mp4',
+        input_srt_file='summit/summit23.wav.srt',
+        input_txt_file='summit/summit23_edited.wav.txt',
+        output_file='summit/summit23_av_edit0.mp4',
+        margin=50,
+        fade=250,
+        speed=0.5,
+        loglevel='16',
+        crossfade=True,
+        greedy=True,
+        dry_run=False
+        )
 
     args = parser.parse_args()
     args.speed = min(2.0, max(0.5, args.speed))
