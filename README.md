@@ -54,4 +54,4 @@ If the desired transcript contains words not in the original (inclusions), we co
 This is the poor man's version of [descript](https://www.descript.com/tour), which allows you to edit
 a video like it's a text document.
 
-The best open source tool we could find is [auto-editor](https://github.com/WyattBlue/auto-editor).
+The best open source tool we could find that do something similar to this are [auto-editor](https://github.com/WyattBlue/auto-editor) and [videogrep](https://github.com/antiboredom/videogrep)
