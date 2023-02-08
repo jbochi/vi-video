@@ -45,7 +45,7 @@ def media_edit():
     re-ordering trimmed segments of original media
     """
     # Local Testing
-    parser = argparse.ArgumentParser()
+    # parser = argparse.ArgumentParser()
     # parser.set_defaults(
     #     # input_media_file='tmp/demo1.mp4',
     #     # input_srt_file='tmp/demo1.wav.srt',
@@ -78,7 +78,7 @@ def media_edit():
     output_path = Path(args.output_file)
     segments = []
     cmds = []
-    cuts = list_cuts(subtitles, desired_transcription=desired_transcription, margin=margin)
+    cuts = list_cuts(subtitles, desired_transcription=desired_transcription, margin=margin, greedy=args.greedy)
     fade_seconds = datetime.timedelta(milliseconds=args.fade_ms).total_seconds()
     audio_video_filter = []
 
