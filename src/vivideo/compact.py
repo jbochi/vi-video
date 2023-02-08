@@ -19,9 +19,7 @@ parser.add_argument(
 )
 
 
-def generate_text(
-    subtitles: Generator[srt.Subtitle, None, None], margin: datetime.timedelta
-) -> str:
+def generate_text(subtitles: Generator[srt.Subtitle, None, None], margin: datetime.timedelta) -> str:
     last_end = datetime.timedelta()
     pieces = []
     for sub in subtitles:

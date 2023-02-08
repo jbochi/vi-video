@@ -13,10 +13,10 @@ def subtitles():
 
 
 def test_generate_text(subtitles):
-    expected = "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country.\n"
-    text = compact.generate_text(
-        subtitles, margin=datetime.timedelta(milliseconds=1000)
+    expected = (
+        "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country.\n"
     )
+    text = compact.generate_text(subtitles, margin=datetime.timedelta(milliseconds=1000))
     assert text == expected
 
 

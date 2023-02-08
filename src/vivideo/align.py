@@ -9,12 +9,8 @@ import srt
 parser = argparse.ArgumentParser(description="Generate compact text")
 
 parser.add_argument("-srt", "--input_srt_file", help="Input SRT file", required=True)
-parser.add_argument(
-    "-txt", "--input_txt_file", help="Edited transcription TXT file", required=True
-)
-parser.add_argument(
-    "-m", "--margin", help="Buffer between utterences", default=0, type=int
-)
+parser.add_argument("-txt", "--input_txt_file", help="Edited transcription TXT file", required=True)
+parser.add_argument("-m", "--margin", help="Buffer between utterences", default=0, type=int)
 parser.add_argument(
     "-g",
     "--greedy",
@@ -38,9 +34,7 @@ def pick_words_greedy(
         while word_index < n_words and words[word_index].lower() != word.lower():
             word_index += 1
         if word_index == n_words:
-            raise ValueError(
-                f"Could not find all words in subtitles. First missing word: {word}"
-            )
+            raise ValueError(f"Could not find all words in subtitles. First missing word: {word}")
         output.append(word_index)
         word_index += 1
     return output
@@ -61,9 +55,7 @@ def pick_words_brute_force(
     desired_word_counts = Counter(desired_words)
     for word, count in desired_word_counts.items():
         if count > len(word_positions[word]):
-            raise ValueError(
-                f"Could not find all words in subtitles. First missing word: {word}"
-            )
+            raise ValueError(f"Could not find all words in subtitles. First missing word: {word}")
 
     used = [False] * len(words)
     path = []
@@ -83,9 +75,7 @@ def pick_words_brute_force(
         current_pos = path[-1] if path else 0
         if len(options) >= max_branch_factor:
             # Only look at the closest options to avoid combinatorial explosion.
-            options = sorted(options, key=lambda p: abs(p - current_pos))[
-                :max_branch_factor
-            ]
+            options = sorted(options, key=lambda p: abs(p - current_pos))[:max_branch_factor]
         for option in options:
             option_cost = cost + abs(option - current_pos)
             used[option] = True
@@ -100,9 +90,7 @@ def pick_words_brute_force(
     return best
 
 
-def compute_cuts(
-    subtitles: List[srt.Subtitle], chosen: List[int], margin: datetime.timedelta
-) -> List[Cut]:
+def compute_cuts(subtitles: List[srt.Subtitle], chosen: List[int], margin: datetime.timedelta) -> List[Cut]:
     """Given a list of subtitles, the list of indices to select, list the timestamp ranges
     that should be cut, while merging segments that are within margin of each other."""
     output = []
