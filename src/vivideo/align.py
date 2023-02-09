@@ -84,11 +84,14 @@ def compute_cuts(word_spans: List[WordAndSpan], chosen: List[int], padding: date
         start = word_span.start
         end = word_span.end
 
-        # TODO: Should check if padding wouldn't cause overlap with undesired words.
-        start -= padding
-        end += padding
-        if start < datetime.timedelta():
-            start = datetime.timedelta()
+        # avoid overlap with previous and next words
+        start = max(
+            start - padding,
+            datetime.timedelta(0) if index == 0 else (start + word_spans[index - 1].end) / 2.0)
+        end = min(
+            end + padding,
+            end + padding if index + 1 == len(word_spans) else (end + word_spans[index + 1].start) / 2.0)
+
         if output and output[-1].end >= start and output[-1].start < start:
             output[-1] = Cut(output[-1].start, end)
         else:

@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description="Edit Media")
 
 parser.add_argument("-i", "--input_media_file", help="Input file", required=True)
 parser.add_argument("-t", "--desired_transcription_file", help="Edited transcription TXT file", required=True)
-parser.add_argument("-p", "--padding", default=0, help="Buffer between utterences in milliseconds", type=int)
+parser.add_argument("-p", "--padding", default=10, help="Buffer between utterences in milliseconds", type=int)
 parser.add_argument("-f", "--fade_ms", default=0, help="Fade In/Out Buffer between utterences", type=int)
 parser.add_argument("-s", "--speed", default=1.0, help="Playback speed", type=int)
 parser.add_argument("-o", "--output_file", default="output.mp4", help="Output media", type=str)

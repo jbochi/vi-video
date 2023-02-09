@@ -13,11 +13,11 @@ def test_list_cuts(transcription):
     )
     expected = [
         Cut(
-            start=timedelta(seconds=5, microseconds=560000),
-            end=timedelta(seconds=6, microseconds=500000),
+            start=timedelta(seconds=5, microseconds=610000),
+            end=timedelta(seconds=6, microseconds=450000),
         ),
         Cut(
-            start=timedelta(seconds=9, microseconds=160000),
+            start=timedelta(seconds=9, microseconds=195000),
             end=timedelta(seconds=10, microseconds=550000),
         ),
     ]
@@ -126,6 +126,31 @@ def test_does_not_minimize_cuts_in_greed_mode():
         Cut(
             start=timedelta(seconds=2),
             end=timedelta(seconds=4),
+        ),
+    ]
+    assert cuts == expected
+
+
+def test_padding_does_not_overlap_with_other_words():
+    transcription = [
+        WordAndSpan(word="first", confidence=1, start=timedelta(seconds=0), end=timedelta(seconds=0.9)),
+        WordAndSpan(word="second", confidence=1, start=timedelta(seconds=1), end=timedelta(seconds=1.9)),
+        WordAndSpan(word="third", confidence=1, start=timedelta(seconds=2), end=timedelta(seconds=2.9)),
+        WordAndSpan(word="fourth", confidence=1, start=timedelta(seconds=3), end=timedelta(seconds=3.9)),
+    ]
+
+    desired_transcription = "second third fourth"
+
+    cuts = list_cuts(
+        transcription,
+        desired_transcription,
+        padding=timedelta(milliseconds=500),
+        greedy=True,
+    )
+    expected = [
+        Cut(
+            start=timedelta(seconds=0.95),
+            end=timedelta(seconds=4.4),
         ),
     ]
     assert cuts == expected
