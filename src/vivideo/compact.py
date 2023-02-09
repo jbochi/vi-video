@@ -1,57 +1,20 @@
-import datetime
-import re
-
-from typing import Generator
-
 import argparse
-import srt
+
+from vivideo.transcribe import get_transcription_dict
 
 parser = argparse.ArgumentParser(description="Generate compact text")
-
-parser.add_argument("-i", "--input_srt_file", help="Input SRT file", required=True)
-parser.add_argument("-o", "--output_txt_file", help="Output TXT file", required=True)
-parser.add_argument(
-    "-m",
-    "--margin",
-    help="Maximum time between utterences in same paragraph (in milliseconds)",
-    default=100,
-    type=int,
-)
+parser.add_argument("-i", "--input_media", help="Input file", required=True)
+parser.add_argument("-m", "--model_path", help="Path for vosk model", default=None)
+parser.add_argument("-t", "--output_txt_file", help="Output transcription TXT file", required=True)
 
 
-def generate_text(subtitles: Generator[srt.Subtitle, None, None], margin: datetime.timedelta) -> str:
-    last_end = datetime.timedelta()
-    pieces = []
-    for sub in subtitles:
-        is_punctuation = re.search(r"^[.,:;!?]", sub.content)
-        is_utterance = re.search(r"\w", sub.content)
-        is_whitespace = re.search(r"^\s*$", sub.content)
-
-        if pieces and sub.start - last_end > margin:
-            pieces[-1] += "\n"
-        if is_utterance:
-            last_end = sub.end
-
-        if pieces and (is_punctuation or pieces[-1].endswith("\n")):
-            pieces[-1] = pieces[-1] + sub.content
-        elif pieces or not is_whitespace:
-            pieces.append(sub.content)
-
-    if pieces:
-        pieces[-1] += "\n"
-    text = " ".join(pieces)
-    return text
-
-
-def main():
-    args = parser.parse_args()
-    with open(args.input_srt_file, "r") as f:
-        subtitles = srt.parse(f.read())
-    margin = datetime.timedelta(milliseconds=args.margin)
-    text = generate_text(subtitles, margin=margin)
-    with open(args.output_txt_file, "w") as f:
+def generate_text(input_media, model_path, output_txt_file):
+    transcription = get_transcription_dict(input_media, model_path=model_path)
+    text = "\n".join([piece["content"] for piece in transcription])
+    with open(output_txt_file, "w") as f:
         f.write(text)
 
 
 if __name__ == "__main__":
-    main()
+    args = parser.parse_args()
+    generate_text(args.input_media, args.model_path, args.output_txt_file)

@@ -3,22 +3,7 @@ import re
 from collections import defaultdict, namedtuple, Counter
 from typing import List
 
-import argparse
-import srt
-
-parser = argparse.ArgumentParser(description="Generate compact text")
-
-parser.add_argument("-srt", "--input_srt_file", help="Input SRT file", required=True)
-parser.add_argument("-txt", "--input_txt_file", help="Edited transcription TXT file", required=True)
-parser.add_argument("-m", "--margin", help="Buffer between utterences", default=0, type=int)
-parser.add_argument(
-    "-g",
-    "--greedy",
-    help="Greedily selects next word, so runs faster",
-    default=True,
-    type=bool,
-    action=argparse.BooleanOptionalAction,
-)
+from vivideo.transcribe import WordAndSpan
 
 Cut = namedtuple("Cut", ["start", "end"])
 
@@ -90,24 +75,18 @@ def pick_words_brute_force(
     return best
 
 
-def compute_cuts(subtitles: List[srt.Subtitle], chosen: List[int], margin: datetime.timedelta) -> List[Cut]:
+def compute_cuts(word_spans: List[WordAndSpan], chosen: List[int], padding: datetime.timedelta) -> List[Cut]:
     """Given a list of subtitles, the list of indices to select, list the timestamp ranges
     that should be cut, while merging segments that are within margin of each other."""
     output = []
     for index in chosen:
-        subtitle = subtitles[index]
-        start = subtitle.start
-        end = subtitle.end
-        # print(subtitle.content, start, end)
+        word_span = word_spans[index]
+        start = word_span.start
+        end = word_span.end
 
-        # TODO: Should check if margin wouldn't cause overlap with undesired words.
-        # TODO: If past word subtitles[index-1] is r"^\'" increase margin by factor? e.g. It's doable
-        start -= margin
-        end += margin
-        if index > 0:
-            if subtitles[index - 1].content.startswith("'"):
-                start -= margin * 1.1
-
+        # TODO: Should check if padding wouldn't cause overlap with undesired words.
+        start -= padding
+        end += padding
         if start < datetime.timedelta():
             start = datetime.timedelta()
         if output and output[-1].end >= start and output[-1].start < start:
@@ -118,39 +97,17 @@ def compute_cuts(subtitles: List[srt.Subtitle], chosen: List[int], margin: datet
 
 
 def list_cuts(
-    subtitles: List[srt.Subtitle],
+    transcription: List[WordAndSpan],
     desired_transcription: str,
-    margin: datetime.timedelta,
+    padding: datetime.timedelta,
     greedy: bool = False,
 ) -> List[Cut]:
     """Given a list of subtitles and a desired transcription, return a list of cuts
     (start, end) that correspond to segments of the media with the desired transcription. Also
     includes a configurable margin of time before and after each cut."""
-    words = [subtitle.content for subtitle in subtitles]
+    words = [word.word for word in transcription]
     if greedy:
         chosen_words = pick_words_greedy(words, desired_transcription)
     else:
         chosen_words = pick_words_brute_force(words, desired_transcription)
-    return compute_cuts(subtitles, chosen_words, margin)
-
-
-def main():
-    args = parser.parse_args()
-    with open(args.input_srt_file, "r") as f:
-        subtitles = list(srt.parse(f.read()))
-    with open(args.input_txt_file, "r") as f:
-        desired_transcription = f.read()
-
-    margin = datetime.timedelta(milliseconds=args.margin)
-    print(
-        list_cuts(
-            subtitles,
-            desired_transcription=desired_transcription,
-            margin=margin,
-            greedy=args.greedy,
-        )
-    )
-
-
-if __name__ == "__main__":
-    main()
+    return compute_cuts(transcription, chosen_words, padding)
