@@ -63,6 +63,8 @@ def media_edit():
         cut_with_ffmpeg(args, cuts)
 
 def cut_with_videogrep(args, cuts):
+    if args.dry_run:
+        return
     composition = [
         {
             "start": cut.start.total_seconds(),
