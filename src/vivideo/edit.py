@@ -1,26 +1,25 @@
 import datetime
-import srt
-
 import os
 from pathlib import Path
 import argparse
 import subprocess
 
+from transcribe import transcribe
+
 from align import list_cuts
 
 parser = argparse.ArgumentParser(description="Edit Media")
 
-parser.add_argument("-media", "--input_media_file", help="Input file", required=True)
-parser.add_argument("-srt", "--input_srt_file", help="Input SRT file", required=True)
-parser.add_argument("-txt", "--input_txt_file", help="Edited transcription TXT file", required=True)
-parser.add_argument("-m", "--margin", default=50, help="Buffer between utterences", type=int)
-parser.add_argument("-f", "--fade_ms", default=125, help="Fade In/Out Buffer between utterences", type=int)
+parser.add_argument("-i", "--input_media_file", help="Input file", required=True)
+parser.add_argument("-t", "--desired_transcription_file", help="Edited transcription TXT file", required=True)
+parser.add_argument("-p", "--padding", default=0, help="Buffer between utterences in milliseconds", type=int)
+parser.add_argument("-f", "--fade_ms", default=0, help="Fade In/Out Buffer between utterences", type=int)
 parser.add_argument("-s", "--speed", default=1.0, help="Playback speed", type=int)
 parser.add_argument("-o", "--output_file", default="output.mp4", help="Output media", type=str)
-
-# Docs: https://ffmpeg.org/ffmpeg.html
-parser.add_argument("-v", "--loglevel", help="FFMpeg loglevel option", default="16")
-
+parser.add_argument(
+    "-v", "--loglevel", help="FFMpeg loglevel option. Refer to https://ffmpeg.org/ffmpeg.html", default="16"
+)
+parser.add_argument("-m", "--model_path", help="Path for vosk model", default=None)
 parser.add_argument(
     "-d",
     "--dry_run",
@@ -44,41 +43,27 @@ def media_edit():
     Advanced media edit and trimming capable of
     re-ordering trimmed segments of original media
     """
-    # Local Testing
-    # parser = argparse.ArgumentParser()
-    # parser.set_defaults(
-    #     # input_media_file='tmp/demo1.mp4',
-    #     # input_srt_file='tmp/demo1.wav.srt',
-    #     # input_txt_file='tmp/demo1_edited.wav.txt',
-    #     # output_file='tmp/demo1.test_edit.mp4',
-
-    #     input_media_file='summit/summit23_av.mp4',
-    #     input_srt_file='summit/summit23.wav.srt',
-    #     input_txt_file='summit/summit23_edited.wav.txt',
-    #     output_file='summit/summit23_av_edit0.mp4',
-    #     margin=50,
-    #     fade=250,
-    #     speed=0.5,
-    #     loglevel='16',
-    #     crossfade=True,
-    #     greedy=True,
-    #     dry_run=False
-    #     )
-
     args = parser.parse_args()
-    args.speed = min(2.0, max(0.5, args.speed))
 
-    with open(args.input_srt_file, "r") as f:
-        subtitles = list(srt.parse(f.read()))
-    with open(args.input_txt_file, "r") as f:
+    with open(args.desired_transcription_file, "r") as f:
         desired_transcription = f.read()
+    transcription = transcribe(args.input_media_file, model_path=args.model_path)
 
-    margin = datetime.timedelta(milliseconds=args.margin)
+    padding = datetime.timedelta(milliseconds=args.padding)
+    cuts = list_cuts(transcription, desired_transcription=desired_transcription, padding=padding, greedy=args.greedy)
+    if args.dry_run:
+        print(f"Found {len(cuts)} cuts")
+        for i, cut in enumerate(cuts):
+            print(f"{i}: {cut.start} - {cut.end}")
 
+    cut_media(args, cuts)
+
+
+def cut_media(args, cuts):
     output_path = Path(args.output_file)
     segments = []
     cmds = []
-    cuts = list_cuts(subtitles, desired_transcription=desired_transcription, margin=margin, greedy=args.greedy)
+
     fade_seconds = datetime.timedelta(milliseconds=args.fade_ms).total_seconds()
     audio_video_filter = []
 

@@ -1,0 +1,155 @@
+[
+    {
+      "content": "and so my fellow americans ask not what",
+      "start": 0.3,
+      "end": 5.61,
+      "words": [
+        {
+          "conf": 1,
+          "end": 0.6,
+          "start": 0.3,
+          "word": "and"
+        },
+        {
+          "conf": 1,
+          "end": 0.99,
+          "start": 0.6,
+          "word": "so"
+        },
+        {
+          "conf": 1,
+          "end": 1.29,
+          "start": 0.99,
+          "word": "my"
+        },
+        {
+          "conf": 1,
+          "end": 1.65,
+          "start": 1.32,
+          "word": "fellow"
+        },
+        {
+          "conf": 1,
+          "end": 2.19,
+          "start": 1.65,
+          "word": "americans"
+        },
+        {
+          "conf": 1,
+          "end": 3.84,
+          "start": 3.27,
+          "word": "ask"
+        },
+        {
+          "conf": 1,
+          "end": 4.41,
+          "start": 3.96,
+          "word": "not"
+        },
+        {
+          "conf": 1,
+          "end": 5.61,
+          "start": 5.37,
+          "word": "what"
+        }
+      ]
+    },
+    {
+      "content": "your country can do for you ask what",
+      "start": 5.61,
+      "end": 8.82,
+      "words": [
+        {
+          "conf": 1,
+          "end": 5.88,
+          "start": 5.61,
+          "word": "your"
+        },
+        {
+          "conf": 1,
+          "end": 6.45,
+          "start": 5.91,
+          "word": "country"
+        },
+        {
+          "conf": 1,
+          "end": 6.69,
+          "start": 6.45,
+          "word": "can"
+        },
+        {
+          "conf": 1,
+          "end": 6.93,
+          "start": 6.69,
+          "word": "do"
+        },
+        {
+          "conf": 1,
+          "end": 7.11,
+          "start": 6.93,
+          "word": "for"
+        },
+        {
+          "conf": 1,
+          "end": 7.59,
+          "start": 7.11,
+          "word": "you"
+        },
+        {
+          "conf": 1,
+          "end": 8.64,
+          "start": 8.16,
+          "word": "ask"
+        },
+        {
+          "conf": 1,
+          "end": 8.82,
+          "start": 8.64,
+          "word": "what"
+        }
+      ]
+    },
+    {
+      "content": "you can do for your country",
+      "start": 8.82,
+      "end": 10.5,
+      "words": [
+        {
+          "conf": 1,
+          "end": 9.18,
+          "start": 8.82,
+          "word": "you"
+        },
+        {
+          "conf": 1,
+          "end": 9.39,
+          "start": 9.21,
+          "word": "can"
+        },
+        {
+          "conf": 1,
+          "end": 9.66,
+          "start": 9.39,
+          "word": "do"
+        },
+        {
+          "conf": 1,
+          "end": 9.81,
+          "start": 9.66,
+          "word": "for"
+        },
+        {
+          "conf": 1,
+          "end": 10.02,
+          "start": 9.81,
+          "word": "your"
+        },
+        {
+          "conf": 1,
+          "end": 10.5,
+          "start": 10.02,
+          "word": "country"
+        }
+      ]
+    }
+  ]
