@@ -1,12 +1,13 @@
+import argparse
 import datetime
 import os
-from pathlib import Path
-import argparse
 import subprocess
+from pathlib import Path
 
-from transcribe import transcribe
+from videogrep.videogrep import create_supercut_in_batches
 
-from align import list_cuts
+from vivideo.align import list_cuts
+from vivideo.transcribe import transcribe
 
 parser = argparse.ArgumentParser(description="Edit Media")
 
@@ -51,15 +52,29 @@ def media_edit():
 
     padding = datetime.timedelta(milliseconds=args.padding)
     cuts = list_cuts(transcription, desired_transcription=desired_transcription, padding=padding, greedy=args.greedy)
+    print(f"Found {len(cuts)} cuts")
     if args.dry_run:
-        print(f"Found {len(cuts)} cuts")
         for i, cut in enumerate(cuts):
             print(f"{i}: {cut.start} - {cut.end}")
 
-    cut_media(args, cuts)
+    if args.speed == 1.0 and args.fade_ms == 0:
+        cut_with_videogrep(args, cuts)
+    else:
+        cut_with_ffmpeg(args, cuts)
+
+def cut_with_videogrep(args, cuts):
+    composition = [
+        {
+            "start": cut.start.total_seconds(),
+            "end": cut.end.total_seconds(),
+            "file": args.input_media_file
+        }
+        for cut in cuts
+    ]
+    create_supercut_in_batches(composition, args.output_file)
 
 
-def cut_media(args, cuts):
+def cut_with_ffmpeg(args, cuts):
     output_path = Path(args.output_file)
     segments = []
     cmds = []
