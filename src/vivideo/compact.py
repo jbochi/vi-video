@@ -1,4 +1,5 @@
 import argparse
+from typing import Optional
 
 from vivideo.transcribe import get_transcription_dict
 
@@ -8,13 +9,14 @@ parser.add_argument("-m", "--model_path", help="Path for vosk model", default=No
 parser.add_argument("-t", "--output_txt_file", help="Output transcription TXT file", required=True)
 
 
-def generate_text(input_media, model_path, output_txt_file):
-    transcription = get_transcription_dict(input_media, model_path=model_path)
-    text = "\n".join([piece["content"] for piece in transcription])
-    with open(output_txt_file, "w") as f:
-        f.write(text)
+def generate_text(transcription: dict):
+    return "\n".join([piece["content"] for piece in transcription])
+
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    generate_text(args.input_media, args.model_path, args.output_txt_file)
+    transcription = get_transcription_dict(args.input_media, model_path=args.model_path)
+    text = generate_text(transcription)
+    with open(args.output_txt_file, "w") as f:
+        f.write(text)

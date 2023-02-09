@@ -1,26 +1,18 @@
 import datetime
 
 import pytest
-import srt
 
 from vivideo import compact
+from vivideo.transcribe import get_transcription_dict
 
 
 @pytest.fixture
-def subtitles():
-    with open("samples/jfk.wav.srt", "r") as f:
-        return srt.parse(f.read())
+def transcription_dict():
+    return get_transcription_dict("samples/jfk.wav")
 
 
-def test_generate_text(subtitles):
-    expected = (
-        "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country.\n"
-    )
-    text = compact.generate_text(subtitles, margin=datetime.timedelta(milliseconds=1000))
-    assert text == expected
-
-
-def test_generate_text_with_short_margin(subtitles):
-    expected = "And so my fellow Americans,\nask not what your country can do for you, ask what you can do for your country.\n"
-    text = compact.generate_text(subtitles, margin=datetime.timedelta(milliseconds=100))
+def test_generate_text(transcription_dict):
+    expected = """and so my fellow americans ask not what\nyour country can do for you ask what
+you can do for your country"""
+    text = compact.generate_text(transcription_dict)
     assert text == expected
