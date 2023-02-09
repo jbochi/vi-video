@@ -1,8 +1,5 @@
 from datetime import timedelta
 
-import pytest
-import srt
-
 from vivideo.align import Cut, list_cuts
 from vivideo.transcribe import WordAndSpan
 
@@ -112,7 +109,6 @@ def test_does_not_minimize_cuts_in_greed_mode():
         WordAndSpan(word="like", confidence=1, start=timedelta(seconds=2), end=timedelta(seconds=3)),
         WordAndSpan(word="this", confidence=1, start=timedelta(seconds=3), end=timedelta(seconds=4)),
     ]
-
 
     desired_transcription = "I like this"
 

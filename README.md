@@ -6,38 +6,27 @@ Edit videos with vi or your favorite text editor.
 
 Editing a video or audio file with this tool consists of three steps:
 
-- Create a srt file and a text file with the transcription
-- Edit the text transcription file
-- Run this tool
+- Run one command to transcribe the media you want to edit
+- Edit the text transcription file in `vi` or your favorite text editor
+- Run another command to cut the video
 
-Execution looks like this:
+### Example commands
 
-```console
-python src/vivideo/edit.py -media samples/jfk.wav -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt -o samples/jfk.edited.wav
-```
-
-If you want to debug which segments of the video are going to be preserved, you can run something like this:
+To generate a trascription text file, you can run this command:
 
 ```console
-python src/vivideo/align.py -srt samples/jfk.wav.srt -txt samples/jfk.wav.edited.txt
+PYTHONPATH=src/ python src/vivideo/transcribe.py -i samples/jfk.wav -t samples/jfk.txt
 ```
 
- Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)). 
-
-## Creating srt files and text script files
-
-We suggest [whisper.cpp](https://github.com/ggerganov/whisper.cpp) to generate srt files with the
-transcription of the file you want to edit. Use `--max-len 1` for word-level timestamps.
+After you have edited the transcription (we recommend you save it with another name), run something like this:
 
 ```console
-./main -m models/ggml-base.en.bin -f samples/jfk.wav  --output-srt --output-txt  --max-len 1
+PYTHONPATH=src/ python src/vivideo/edit.py -i samples/jfk.wav -t samples/jfk.edited.txt -o samples/jfk.edited.wav
 ```
 
-To generate the trascription text file, you can run this command:
+ Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)).
 
-```console
-python src/vivideo/compact.py -i samples/jfk.wav.srt -o samples/jfk.wav.txt
-```
+ You will also need to run `pip install vosk` to generate the transcriptions.
 
 ## Algorithm
 

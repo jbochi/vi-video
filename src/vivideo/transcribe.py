@@ -1,3 +1,4 @@
+import argparse
 from collections import namedtuple
 from datetime import timedelta
 from typing import List, Optional
@@ -24,3 +25,20 @@ def transcribe(media_file: str, model_path: Optional[str] = None) -> List[WordAn
         for word in piece["words"]
     ]
     return words_with_spans
+
+
+def generate_text(transcription: dict):
+    return "\n".join([piece["content"] for piece in transcription])
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate compact transcription text")
+    parser.add_argument("-i", "--input_media", help="Input file", required=True)
+    parser.add_argument("-m", "--model_path", help="Path for vosk model", default=None)
+    parser.add_argument("-t", "--output_txt_file", help="Output transcription TXT file", required=True)
+
+    args = parser.parse_args()
+    transcription = get_transcription_dict(args.input_media, model_path=args.model_path)
+    text = generate_text(transcription)
+    with open(args.output_txt_file, "w") as f:
+        f.write(text)

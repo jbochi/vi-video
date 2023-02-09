@@ -1,5 +1,4 @@
 import pytest
-import srt
 
 from vivideo.transcribe import transcribe
 
