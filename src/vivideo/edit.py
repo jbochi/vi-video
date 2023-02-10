@@ -39,7 +39,7 @@ parser.add_argument(
 )
 
 
-def media_edit():
+def edit_main():
     """
     Advanced media edit and trimming capable of
     re-ordering trimmed segments of original media
@@ -57,7 +57,7 @@ def media_edit():
         for i, cut in enumerate(cuts):
             print(f"{i}: {cut.start} - {cut.end}")
 
-    if args.speed == 1.0 and args.fade_ms == 0:
+    if args.speed == 1.0 and args.fade_ms == 0 and (not args.input_media_file.endswith(".wav")):
         cut_with_videogrep(args, cuts)
     else:
         cut_with_ffmpeg(args, cuts)
@@ -204,4 +204,4 @@ def cut_with_ffmpeg(args, cuts):
 
 
 if __name__ == "__main__":
-    media_edit()
+    edit_main()

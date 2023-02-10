@@ -21,6 +21,10 @@ classifiers = [
 "Homepage" = "https://github.com/jbochi/vi-video"
 "Bug Tracker" = "https://github.com/jbochi/vi-video/issues"
 
+[project.scripts]
+vivideo-transcribe = "vivideo.transcribe:transcribe_main"
+vivideo-edit = "vivideo.edit:edit_main"
+
 [tool.pytest.ini_options]
 pythonpath = "src"
 addopts = [

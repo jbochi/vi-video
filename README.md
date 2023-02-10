@@ -12,16 +12,22 @@ Editing a video or audio file with this tool consists of three steps:
 
 ### Example commands
 
+To install this package, run:
+
+```console
+pip install vivideo
+```
+
 To generate a trascription text file, you can run this command:
 
 ```console
-PYTHONPATH=src/ python src/vivideo/transcribe.py -i samples/jfk.wav -t samples/jfk.txt
+vivideo-transcribe -i samples/jfk.wav -t samples/jfk.txt
 ```
 
 After you have edited the transcription (we recommend you save it with another name), run something like this:
 
 ```console
-PYTHONPATH=src/ python src/vivideo/edit.py -i samples/jfk.wav -t samples/jfk.edited.txt -o samples/jfk.edited.wav
+vivideo-edit -i samples/jfk.wav -t samples/jfk.edited.txt -o samples/jfk.edited.wav --no-greedy
 ```
 
  Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)).

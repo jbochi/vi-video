@@ -11,9 +11,7 @@ WORD_PATTERN = re.compile(r"[^\s.,]+")
 
 
 def words_in_transcription(desired_transcription):
-    x = [w.lower() for w in WORD_PATTERN.findall(desired_transcription)]
-    print(x)
-    return x
+    return [w.lower() for w in WORD_PATTERN.findall(desired_transcription)]
 
 
 def pick_words_greedy(
