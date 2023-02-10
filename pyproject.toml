@@ -5,6 +5,21 @@ build-backend = "hatchling.build"
 [project]
 name = "vivideo"
 version = "0.0.1"
+authors = [
+  { name="Juarez Bochi", email="jbochi@gmail.com" },
+]
+description = "Edit videos with a text editor"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jbochi/vi-video"
+"Bug Tracker" = "https://github.com/jbochi/vi-video/issues"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
