@@ -62,15 +62,12 @@ def media_edit():
     else:
         cut_with_ffmpeg(args, cuts)
 
+
 def cut_with_videogrep(args, cuts):
     if args.dry_run:
         return
     composition = [
-        {
-            "start": cut.start.total_seconds(),
-            "end": cut.end.total_seconds(),
-            "file": args.input_media_file
-        }
+        {"start": cut.start.total_seconds(), "end": cut.end.total_seconds(), "file": args.input_media_file}
         for cut in cuts
     ]
     create_supercut_in_batches(composition, args.output_file)

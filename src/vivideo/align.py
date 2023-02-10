@@ -7,6 +7,14 @@ from vivideo.transcribe import WordAndSpan
 
 Cut = namedtuple("Cut", ["start", "end"])
 
+WORD_PATTERN = re.compile(r"[^\s.,]+")
+
+
+def words_in_transcription(desired_transcription):
+    x = [w.lower() for w in WORD_PATTERN.findall(desired_transcription)]
+    print(x)
+    return x
+
 
 def pick_words_greedy(
     words: List[str],
@@ -15,8 +23,8 @@ def pick_words_greedy(
     word_index = 0
     n_words = len(words)
     output = []
-    for word in re.findall(r"['\w]+", desired_transcription):
-        while word_index < n_words and words[word_index].lower() != word.lower():
+    for word in words_in_transcription(desired_transcription):
+        while word_index < n_words and words[word_index].lower() != word:
             word_index += 1
         if word_index == n_words:
             raise ValueError(f"Could not find all words in subtitles. First missing word: {word}")
@@ -36,7 +44,7 @@ def pick_words_brute_force(
     for i, word in enumerate(words):
         word_positions[word.lower()].append(i)
 
-    desired_words = [w.lower() for w in re.findall(r"['\w]+", desired_transcription)]
+    desired_words = words_in_transcription(desired_transcription)
     desired_word_counts = Counter(desired_words)
     for word, count in desired_word_counts.items():
         if count > len(word_positions[word]):
@@ -86,11 +94,11 @@ def compute_cuts(word_spans: List[WordAndSpan], chosen: List[int], padding: date
 
         # avoid overlap with previous and next words
         start = max(
-            start - padding,
-            datetime.timedelta(0) if index == 0 else (start + word_spans[index - 1].end) / 2.0)
+            start - padding, datetime.timedelta(0) if index == 0 else (start + word_spans[index - 1].end) / 2.0
+        )
         end = min(
-            end + padding,
-            end + padding if index + 1 == len(word_spans) else (end + word_spans[index + 1].start) / 2.0)
+            end + padding, end + padding if index + 1 == len(word_spans) else (end + word_spans[index + 1].start) / 2.0
+        )
 
         if output and output[-1].end >= start and output[-1].start < start:
             output[-1] = Cut(output[-1].start, end)

@@ -24,14 +24,14 @@ def test_list_cuts(transcription):
     assert cuts == expected
 
 
-def test_list_cuts_accepts_apostrophes():
+def test_list_cuts_accepts_special_characters():
     transcription = [
         WordAndSpan(word="I'm", confidence=1, start=timedelta(seconds=0), end=timedelta(seconds=2)),
         WordAndSpan(word="a", confidence=1, start=timedelta(seconds=2), end=timedelta(seconds=3)),
-        WordAndSpan(word="subtitle", confidence=1, start=timedelta(seconds=3), end=timedelta(seconds=4)),
+        WordAndSpan(word="go-getter", confidence=1, start=timedelta(seconds=3), end=timedelta(seconds=4)),
     ]
 
-    desired_transcription = "I'm"
+    desired_transcription = "I'm a go-getter"
 
     cuts = list_cuts(
         transcription,
@@ -41,7 +41,7 @@ def test_list_cuts_accepts_apostrophes():
     expected = [
         Cut(
             start=timedelta(seconds=0),
-            end=timedelta(seconds=2),
+            end=timedelta(seconds=4),
         ),
     ]
     assert cuts == expected
