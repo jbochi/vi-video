@@ -1,2 +1,3 @@
 videogrep
 vosk
+imageio_ffmpeg
