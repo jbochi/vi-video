@@ -7,7 +7,7 @@ from vivideo.transcribe import WordAndSpan
 
 Cut = namedtuple("Cut", ["start", "end"])
 
-WORD_PATTERN = re.compile(r"[^\s.,]+")
+WORD_PATTERN = re.compile(r"[^\s.,;]+")
 
 
 def words_in_transcription(desired_transcription):
