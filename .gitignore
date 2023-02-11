@@ -3,7 +3,6 @@
 __pycache__/
 tmp/
 summit/
-townhall/
 *.py[cod]
 *$py.class
 
