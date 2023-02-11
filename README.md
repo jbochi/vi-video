@@ -30,9 +30,7 @@ After you have edited the transcription (we recommend you save it with another n
 vivideo-edit -i samples/jfk.wav -t samples/jfk.edited.txt -o samples/jfk.edited.wav --no-greedy
 ```
 
- Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)).
-
- You will also need to run `pip install vosk` to generate the transcriptions.
+ Vi-Video uses [FFMpeg](https://ffmpeg.org/) as audio and video processing tools. In order to execute the steps above, it is required to have FFMpeg library installed ([read more](./docs/ffmpeg.MD)). You will also need [vosk](https://alphacephei.com/vosk) package to generate the transcriptions. additional [models](https://alphacephei.com/vosk/models) can be downloaded for improved accuracy.
 
 ## Algorithm
 
